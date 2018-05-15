@@ -1,0 +1,886 @@
+*{
+	padding: 0;
+	margin: 0;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+	outline: none;
+	color: #36404e;
+	text-decoration: none;
+	font-family: 'Roboto', Helvetica, sans-serif, arial , "time new roman";
+	&::-moz-selection{
+		background: #ffc20e;
+		color: #fff;
+	}
+	&::selection{
+		background: #ffc20e;
+		color: #fff;
+	}
+}
+img{
+	width: 100%;
+}
+body{
+	overflow-x: hidden;
+	width: 100%;
+	.header{
+		list-style: none;
+		z-index: 2;
+		top:0;
+		position: relative;
+		background-color: rgba(250, 250, 250, 0);
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		border-bottom: 1px solid #fff;
+		&-720px{
+			display: none;
+		}
+		&-logo{
+			flex-grow: 1;
+			position: relative;
+			width: 60%;
+			&-item{
+				position: absolute;
+				width: 50%;
+				&-320px{
+					width: 45%;
+					max-width: 80px;
+					height: 100%;
+					transition: .5s;
+					background: url(../images/logo/icon-yeahmobi-c@2x.png)no-repeat center center;
+					background-size:45%;
+					&:hover{
+						background: url(../images/logo/icon-yeahmobi-w@2x.png)no-repeat center center;
+					background-size:45%;
+					}
+				}
+			}
+		}
+		.icon{
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			flex-grow: 0;
+			a{
+				font-size: 12px;
+				padding:0 3px;
+				line-height: 4em;
+				position: relative;
+				color: #fff;
+				text-transform:uppercase;
+				&::before{
+					display: block;
+					position: absolute;
+					content:'';
+					left: -18px;
+					top:47%;
+					width: 16px;
+					height: 16px;
+					margin-top: -8px;
+					background-size: cover;
+					background-image: url(../images/logo/icon-lang.png);
+				}
+			}
+			i{
+				padding: 0 3px;
+				color: #fff;
+				line-height: 3em;
+			}
+		}
+		.login{
+			width: 15%;
+			line-height: 3em;
+			a{
+				color: rgb(255, 194, 14);
+				padding: 0 1em;
+				font-weight: 700;
+				font-size: 12px;
+				transition: .5s;
+				padding:.75em .75em;
+				border-radius: .25em;
+				text-transform:uppercase;
+				&:hover{
+					background: rgb(255, 194, 14);
+					color: #36404e;
+				}
+			}
+			i{
+				color: #fff;
+			}
+		}
+		&-container{
+			margin:auto;
+			&-bar{
+				border-left:1px solid #fff;
+				&-menu{
+					i{
+						color: rgb(255, 194, 14);
+						padding: 1em;
+					}	
+					&:hover i{
+						color: rgb(255, 255, 255);
+					}
+				}
+				&-element{
+					display: none;
+				}
+			}
+		}
+	}
+	.Slider{
+		width: 100%;
+		position: relative;
+		top:-3.1em;
+		z-index: 1;
+		overflow: hidden;
+		.next,.prev{
+			position: absolute;
+			top: 50%;
+			transition: .5s;
+			opacity: 0;
+			&::after{
+				font-size: 30px;
+				color:#fff;
+			}
+		}
+		.next{
+			left: -5%;
+			&::after{
+				content:"\f053";
+			}
+		}
+		.prev{
+			right: -5%;
+			&::after{
+				content:"\f054";
+			}
+		}
+		&:hover .next{
+			opacity: 1;
+			left:0px;
+		}
+		&:hover .prev{
+			opacity: 1;
+			right:0%;
+		}
+		&-content{
+			width: 100%;
+			height: 500px;
+			background-size: cover;
+			&-picker{
+				position: absolute;
+			    bottom: 5px;
+			    left: 30%;
+			    width: 40%;
+			    height: 20px;
+			    display: flex;
+			    &-items{
+			    	height: 5px;
+			    	margin:0 .5em;
+			    	border-radius: 1em;
+			    	background:rgba(54, 64, 78, 0.7);
+			    	.showtime{
+			    		display: block;
+			    		list-style: none;
+			    		transition: 5s;
+			    		border-radius: 1em;
+			    		height: 5px;
+			    		width: 0%;
+			    		background: rgba(255, 194, 14, 0.5);
+			    	}
+			    	.active{
+			    		width: 100%;
+			    	}
+			    }
+			}
+		}
+	}
+	.slider-logo{
+		width: 100%;
+		padding: .5em;
+		margin-bottom: 3em;
+		display: flex;
+		position: relative;
+		min-height: 40px;
+		&-show{
+			opacity: .5;
+			width: 100%;
+			&:hover{
+				opacity: 1;
+			}
+		}
+	}
+	.navigation{
+		width: 100%;
+		border: 1px solid #e8e8e8;
+		border-left: none;
+		border-right: none;
+		background: #f7f7f8;
+		padding: 3.5em 0;
+		&-content{
+			width: 27%;
+			margin: auto;
+		}
+		h1,p{
+			text-align: center;
+	
+		}
+		h1{
+			font-size: 25px;
+			font-weight: 700;
+		}
+		p{
+			font-size: 14px;
+			padding-bottom: 4em;
+			padding-top: .2em;
+		}
+		.last{
+			padding-bottom: 1.3em;
+		}
+	}
+	.soc{
+		display: none;
+		background: #f7f7f8;
+	}
+	.Audiences{
+		&-title, &-text{
+			padding: 2.4em;
+			padding-bottom: 0;
+			font-weight: 100;
+			text-align: center;
+			font-size: 50px;
+		}
+		&-text{
+			font-size: 20px;
+			padding-top: .7em;
+			line-height: 1.4em;
+			font-weight: 300;
+		}
+	}
+	.slectorSilder{
+		padding: 3em 1.75em;
+		&-item{
+			overflow: hidden;
+			width: 100%;
+			height: 60px;
+			text-align: center;
+			&-img{
+				width: 25%;
+			}
+		}
+		&-text{
+			text-align: center;
+			span{
+				font-weight: 900;
+		
+				font-size: smaller;
+			}
+			&-title,&-list-item{
+				text-align: left;
+				font-size: 14px;
+			}
+			&-title{
+				position: relative;
+				font-weight: 700;
+				padding-top: 3.5em;
+				padding-bottom: 1.6em;
+				&::before{
+					content: '';
+					background: #36404e;
+					width: 19%;
+					height: 4px;
+					position: absolute;
+					top: 20%;
+					left: 40.7%;
+				}
+			}
+			&-list{
+				padding-left: 1.2em;
+				padding-bottom: 2em;
+				&-item{
+					line-height: 26px;
+				}
+			}
+			&-gettouch{
+				line-height: 2em;
+				border: 1px solid #36404e;
+				border-radius: .2em;
+				text-align: left;
+				margin-bottom:5em;
+				a{
+					display: block;
+					font-weight: 700;
+					text-transform: uppercase;
+					font-size: 12px;
+					-webkit-transition: .5s;
+					transition: .5s;
+					padding-left: 1.5em;
+					i{
+						padding-left:1em;
+						color: #fff;
+					}
+					&:hover,&:focus,&:active i{
+						background: #36404e;
+						color: #fff;
+					}
+				}
+			}
+		}
+	}
+	.payment{
+		background: #f7f7f8;
+		padding: 4em 1.5em;
+		border: 1px solid #e8e8e8;
+		border-left: none;
+		border-right: none;
+		&-title{
+			font-size: 9px;
+			font-weight: 100;
+			padding-bottom: 3em;
+		}
+		&-container{
+			text-align: center;
+			img{
+				width: 18%;
+			}
+		}
+	}
+	.footer-widgets{
+		padding-bottom: 2em;
+		background: #f7f7f8;
+		padding-top: 1em;
+		&-table{
+			background: #fafafa;
+			width: 85%;
+			border: 2px solid #ffc20e;
+			margin: auto;
+			transition: 1s;
+			&:hover{
+				background: #fff;
+			}
+			&-container{
+				display: flex;
+				padding: 1em 1em 1.5em 1em;
+				&-sub{
+					margin-right: 1em;
+					width: 45%;
+					max-width: 60px;
+					height: 3.3em;
+					border: 1px solid #282828;
+					h5{
+						text-align: center;
+						padding: .4em 1em;
+						font-size:12px;
+					}
+				}
+				&-content{
+					&-title{
+						font-size: 12px;
+						font-weight: 400;
+						color: #282828;
+					}
+					&-text{
+						color: #939598;
+						font-weight: 100;
+						font-size: 16px;
+					}
+				}
+			}
+		}
+		&-block{
+			h6{
+				margin: 1.5em;
+				padding-bottom: .5em;
+				font-size: 13px;
+				border-bottom: 1px solid #36404e;
+				font-weight: 900;
+			}
+			&-contents,&-icons{
+				margin: 1.5em;
+				font-size: 12px;
+				list-style: none;
+				font-weight: 100;
+			}
+			&-icons{
+				position: relative;
+				&-items{
+					position: absolute;
+				    top: .75em;
+					left: 3em;
+					transition: .5s;
+					&:hover{
+						color:#ffc20e;
+					}
+				}
+				img{
+					width: 10%;
+					opacity:.5;
+					max-width: 30px;
+				}
+			}
+		}
+	}
+	.footer{
+		padding: 2em 0;
+		width: 90%;
+		margin: auto;
+		text-align: center;
+		&-logo{
+			&-img{
+				width: 50%;
+			}
+		}
+		.copyright{
+			font-size: 14px;
+		}
+	}
+	#GoTop{
+		width: 2em;
+		height: 2em;
+		text-align: center;
+		position: fixed;
+		right: 10px;
+		line-height: 1.8em;
+		background: rgba(54, 64, 78, 0.5);
+		bottom: 10px;
+		&::before{
+			content: "\f106";
+			color: #fff;
+			font-size: 2.5em;
+		}
+	}
+}
+@media screen and (min-width: 345px){
+	body{
+		.slectorSilder{
+			&-item{
+				height: 78px;
+			}
+		}
+	}
+}
+@media screen and (min-width: 430px){
+	body{
+		.slectorSilder{
+			&-item{
+				height: 102px;
+			}
+		}
+	}
+}
+@media screen and (min-width: 540px){
+	body{
+		.slectorSilder{
+			&-item{
+				height: 136px;
+			}
+		}
+		.footer{
+			margin:0;
+			text-align: left;
+			&-logo{
+				padding-left:1em;
+				&-img{
+					width: 30%;
+				}
+			}
+			.copyright{
+				padding-left: 2em;
+				padding-top:1em;
+			}
+		}
+		.footer-widgets{
+			display: flex;
+			flex-wrap: wrap;
+			&-block{
+				width: 50%;
+			}
+		}
+	}
+}
+@media screen and (min-width: 600px){
+	body{
+		.navigation{
+			display: flex;
+			&-content{
+				
+			}
+			.last{
+				padding-bottom:4em;
+			}
+		}
+		.slectorSilder{
+			padding:3em 0;
+			width: 85%;
+			margin: auto;
+			&-text{
+				&-gettouch{
+					width: 25%;
+					transition: .5s;
+					&:hover{
+						width: 30%;
+					}
+				}
+			}
+		}
+		.payment-container{
+			img{
+				width: 13%;
+			}
+		}
+	}
+}
+@media screen and (min-width: 768px){
+	body{
+		.header{
+			position: fixed;
+			width: 100%;
+			background: rgba(32, 45, 52, 0.61);
+			&-720px{
+				display: block;
+				width: 149%;
+				padding-right:1.5em;
+				&-container{
+					width: 100%;
+					flex-wrap: wrap;
+					&-bar{
+						&-element{
+							display: flex;
+							line-height: 3em;
+							list-style: none;
+							&-text{
+								position: relative;
+								top:0px;
+								a{
+									transition:.5s;
+									padding:0 .5em;
+									display: block;
+									color: #fff;
+									text-align: center;
+									text-transform: uppercase;
+									font-size: 14px;
+									&:hover{
+										background: rgb(255, 194, 14);
+										color:#36404e;
+									}
+								}
+								&-sub{
+									&-menu{
+										transition:.75s;
+										top:49px;
+										display: none;
+										position: absolute;
+										list-style: none;
+										width: 130%;
+										&-list{
+											&-item{
+
+											}
+										}
+									}
+								}
+								&:hover .header-720px-container-bar-element-text-sub-menu{
+									display: block;
+									background: #ffc20e;
+								}
+							}
+						}
+					}
+				}
+			}
+			&-container{
+				&-bar{
+					&-menu{
+						i{
+							display: none;
+						}
+					}
+				}
+			}
+		}
+		.slectorSilder{
+			display: none;
+		}
+		.soc{
+			display: block;
+			background: #f7f7f8;
+			&ial{
+				height: 5em;
+				padding: 0 25%;
+				overflow: hidden;
+				display: flex;
+				margin: 0 auto;
+				margin-bottom: 5em;
+				label{
+					position: absolute;
+				}
+				&-block{
+					margin: 0 2em;
+					position: relative;
+					&-btn{
+						width: 5.5em;
+						height: 5em;
+						background: #f7f7f8;
+						border: none;
+						transition: .5s;
+					}
+					#native{
+						background: url("../images/selectorSilder/ficon-native.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#performance{
+						background: url("../images/selectorSilder/ficon-performance.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#socialsearrch{
+						background: url("../images/selectorSilder/ficon-socialsearch.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#mediabuying{
+						background: url("../images/selectorSilder/ficon-mediabuying.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+				}
+			}
+			&-introduce{
+				display: flex;
+				position: relative;
+				transition: .5s;
+				height: 12em;
+				width: 400%;
+				&-ele{
+					width: 100%;
+					display: flex;
+					padding: 0 6%;
+					&-content{
+						padding: 0 .5em;
+						&-btn{
+							border: 1px solid #444;
+							padding: .5em;
+							transition: .5s;
+							border-radius: .25em;
+							&:hover{
+								background: #444;
+								color: #fff;
+							}
+						}
+						&-last{
+							margin-bottom: 1em;
+						}
+					}
+				}
+			}
+		}	
+	}
+}
+@media screen and (min-width: 980px){
+	body{
+		.navigation-content{
+			text-align: center;
+			img{
+				width: 50%;
+			}
+		}
+		.footer-widgets{
+			&-block{
+				width: 33.33%;
+			}
+		}
+	}
+}
+@media screen and (min-width: 1024px){
+	body{
+		.header{
+			&-logo{
+				&-item{
+					&-320px{
+						margin-left: 6em;
+						display: block;
+						max-width: 100%;
+						background: url(../images/logo/rocket.png) no-repeat center center;
+						background-size: 100%;
+						&:hover{
+							background: url(../images/logo/logo2.png) no-repeat center center;
+							background-size: 30%;
+						}
+					}
+				}
+			}
+			&-720px{
+				&-container{
+					&-bar{
+						&-element{
+							&-text{
+								width: 20%;
+							}
+						}
+					}
+				}
+			}
+		}
+		.Slider-content{
+			height: 43em;
+		}
+		.footer-widgets{
+			&-table{
+				width: 25%;
+				order: 4;
+			}
+			&-block{
+				width: 25%;
+			}
+		}
+		.footer-logo-img{
+			width: 15%;
+		}
+		.payment{
+			&-title{
+				font-size: 12px;
+			}
+			&-container{
+				img{
+					width: 8%;
+				}
+			}
+		}
+	}
+}
+@media screen and (min-width: 1360px){
+	body{
+		.navigation{
+			padding: 0em 15em;
+			&-content{
+				p{
+					padding-bottom: 1em;
+				}
+			}
+		}
+		.footer{
+			display: -webkit-inline-flex;
+			display: -moz-inline-flex;
+			display: -ms-inline-flex;
+			display: -o-inline-flex;
+			display: inline-flex;
+			width: 100%;
+			&-logo{
+				width: 30%;
+				&-img{
+					width: 100%;
+				}
+			}
+		}
+		.Slider{
+			&-content{
+				height: 56em;
+			}
+		}
+		.header{
+			&-logo{
+				&-item{
+					max-width: 30%;
+				}
+			}
+		}
+		.soc{
+			background: #f7f7f8;
+			&ial{
+				height: 10em;
+				padding: 0 17%;
+				overflow: hidden;
+				display: flex;
+				margin-bottom: 5em;
+				label{
+					position: absolute;
+				}
+				&-block{
+					margin: 0 2em;
+					position: relative;
+					&-btn{
+						width: 11em;
+						height: 10.7em;
+						background: #f7f7f8;
+						border: none;
+						transition: .5s;
+					}
+					#native{
+						background: url("../images/selectorSilder/ficon-native.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#performance{
+						background: url("../images/selectorSilder/ficon-performance.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#socialsearrch{
+						background: url("../images/selectorSilder/ficon-socialsearch.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#mediabuying{
+						background: url("../images/selectorSilder/ficon-mediabuying.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+				}
+			}
+		}
+		.footer{
+			.copyright{
+				padding-top: 6em;
+			}
+		}
+	}
+}
+@media screen and (min-width: 1600px){
+	body{
+		.soc{
+			background: #f7f7f8;
+			&ial{
+				height: 11em;
+				padding: 0 25%;
+				overflow: hidden;
+				display: flex;
+				margin-bottom: 5em;
+				label{
+					position: absolute;
+				}
+				&-block{
+					margin: 0 2em;
+					position: relative;
+					&-btn{
+						width: 11em;
+						height: 10.7em;
+						background: #f7f7f8;
+						border: none;
+						transition: .5s;
+					}
+					#native{
+						background: url("../images/selectorSilder/ficon-native.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#performance{
+						background: url("../images/selectorSilder/ficon-performance.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#socialsearrch{
+						background: url("../images/selectorSilder/ficon-socialsearch.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+					#mediabuying{
+						background: url("../images/selectorSilder/ficon-mediabuying.png");
+						background-repeat-x: no-repeat;
+						background-size: cover;
+					}
+				}
+			}
+		}
+	}
+}
