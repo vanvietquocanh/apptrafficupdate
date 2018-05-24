@@ -34,6 +34,8 @@ SortItems.prototype.getAPI = function(path, data){
 		if(res.length===500&&!sortItems.searchMethod){
 			sortItems.countStart += 500;
 			sortItems.countEnd += 500;
+			data.countStart = sortItems.countStart;
+			data.countEnd = sortItems.countEnd;
 			sortItems.getAPI(sortItems.path, data);
 		}
 	});
@@ -65,14 +67,14 @@ SortItems.prototype.renderReport = function() {
 	var lengthofListReportClick = this.dataReportClick.length;
 	for(let x = 0; x < this.dataReportClick.length; x++){
 		var elementHtml = `<tr role="row" class="odd fixcenter sel-items" style="color: #111">
-							<td class="sorting_1" tabindex="0" style="color: #111">${sortItems.dataReportClick[x].id}</td>
+							<td class="sorting_1" tabindex="0" style="color: #111"><br/>${sortItems.dataReportClick[x].idOffer}<br/><br/>${sortItems.dataReportClick[x].id}<br/><br/></td>
 							<td class="sorting_1" tabindex="0" style="color: #111">${sortItems.dataReportClick[x].appName}</td>
 							<td class="sorting_1" tabindex="0" style="color: #111">${sortItems.dataReportClick[x].name}</td>
-							<td class="showItems-name">${sortItems.dataReportClick[x].idOffer}</td>
 							<td style="color: #111;">${sortItems.dataReportClick[x].time}</td>
-							<td style="color: #111;">${sortItems.dataReportClick[x].ip}</td>
+							<td style="color: #111;"><br/>${sortItems.dataReportClick[x].ip}<br/><br/>${sortItems.dataReportClick[x].networkName.toUpperCase()}</td>
 							<td>${sortItems.dataReportClick[x].agent}</td>
 							<td style="max-width:10px;">${sortItems.dataReportClick[x].country}</td>
+							<td>${sortItems.dataReportClick[x].pay}</td>
 							<td>${sortItems.dataReportClick[x].key}</td>
 						</tr>`;
 			sortItems.arrayList.push(elementHtml)

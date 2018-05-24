@@ -115,6 +115,8 @@ SortItems.prototype.createHtml = function(dataRender){
 					                    <div class="content-info maxwidth-size line-1366 content-flex country-size-block">
 					                        <ul class="offerItems-nonePd fix-margin flex-left country-size">
 					                            <li class="style-list-of-items">
+						                            <a class="upper-case text-block" style="background:#3498db; color: #fff">${val.offeridSet}</a>
+					                                <a class="upper-case text-block" style="background:#e67e22; color: #fff">${val.nameNetworkSet}</a>
 					                                <a class="upper-case text-block">${val.dataOffer.countrySet}</a>
 					                            </li>
 					                            <li class="style-list-of-items">`;

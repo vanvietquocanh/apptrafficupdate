@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 			})		
 		})
 	}
-	function redirectAPI(app, data, person) {
+	function redirectAPI(app, data, person, geo) {
 		var queryNetwork = {
 			"isNetwork" : true
 		}
@@ -27,7 +27,7 @@ router.get('/', function(req, res, next) {
 		var strToday = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}`;
 		var strRandom = randomstring.generate();
 		if(person.master){
-			data.paySet = Math.round((data.paySet/100*7)*100)/100;
+			data.paySet = Math.round((data.paySet)*100)/100;
 		}
 		var dataUpdate = {
 			"appName"    : data.nameSet,
@@ -36,7 +36,7 @@ router.get('/', function(req, res, next) {
             "id"	 	 : req.query.aff_id,
             "time"		 : strToday,
             "seconds"    : today.getTime(),
-            "country"    : data.countrySet,
+            "country"    : geo,
             "ip"	 	 : ip,
             "agent"		 : req.headers['user-agent'],
             "key" 		 : strRandom,
@@ -57,8 +57,12 @@ router.get('/', function(req, res, next) {
 							if(result.length!==0){
 								for(let x = 0; x < result.length; x++){
 									if(app.nameNetworkSet.toLowerCase().indexOf(result[x].name.toLowerCase())!==-1){
-										var link = `${app.urlSet}&${result[x].postback}=${strRandom}`;
+										try {
+											var link = app.urlSet+"&"+result[x].postback+"="+strRandom;
 											save(dataUpdate,link)
+										} catch(e) {
+											res.send(e)
+										}
 										break;
 									}
 								}
@@ -77,23 +81,27 @@ router.get('/', function(req, res, next) {
 			return app.countrySet.indexOf(geoVal)!==-1;
 		}
 		function checkPostback(app, person, db) {
-			var geo = geoip.lookup(req.headers["x-real-ip"]).country;
-			if(checkIpAddress(app, geo)){
-				if(person.member){
-					if(person.request.length>0){
-						let data = person.request.filter(function(items) {
-							return items.app.index === req.query.offer_id&&items.adConfirm === "true";
-						});
-						if(data.length === 0){
-							res.redirect("/");
+			var geo = geoip.lookup(req.headers["x-real-ip"]);
+			if(geo){
+				if(checkIpAddress(app, geo.country)){
+					if(person.member){
+						if(person.request.length>0){
+							let data = person.request.filter(function(items) {
+								return items.app.index === req.query.offer_id&&items.adConfirm === "true";
+							});
+							if(data.length === 0){
+								res.redirect("/");
+							}else{
+								redirectAPI(app, data[0].app, person, geo.country)
+							}
 						}else{
-							redirectAPI(app, data[0].app, person)
+							res.redirect("/");
 						}
-					}else{
-						res.redirect("/");
+					}else if(person.master||person.admin){
+						redirectAPI(app, app, person, geo.country)
 					}
-				}else if(person.master||person.admin){
-					redirectAPI(app, app, person)
+				}else{
+					res.send("We're sorry, this offer is not currently available. Please try again later or contact customer support for further information")
 				}
 			}else{
 				res.send("We're sorry, this offer is not currently available. Please try again later or contact customer support for further information")
@@ -117,18 +125,22 @@ router.get('/', function(req, res, next) {
 		})
 	}
 	function checkApp(profile, db) {
-		var querySearchOffer = {
-			"index" : Number(req.query.offer_id)
-		}
-		db.collection('offer').findOne(querySearchOffer, (err,result)=>{
-			if(!err){
-				if(result){
-					checkInCvr(result, profile, db);
-				}
-			}else{
-				res.redirect("/")
+		if(profile&&db){
+			var querySearchOffer = {
+				"index" : Number(req.query.offer_id)
 			}
-		})
+			db.collection('offer').findOne(querySearchOffer, (err,result)=>{
+				if(!err){
+					if(result){
+						checkInCvr(result, profile, db);
+					}
+				}else{
+					res.redirect("/")
+				}
+			})
+		}else{
+			res.send("error")
+		}
 	}
 	try {
 		var query = {

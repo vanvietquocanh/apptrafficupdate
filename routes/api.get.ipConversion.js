@@ -21,7 +21,11 @@ router.get('/:cvr', function(req, res, next) {
 						for (var i = 0; i < result.length; i++) {
 							dataRes = dataRes.concat(result[i]._id)
 						}
-						res.send(dataRes);
+						var dataResStr = "";
+						dataRes.forEach((ele,i)=>{
+							dataResStr +=`<li style='list-style: none;'>${ele}</li>`
+						})
+						res.send(dataResStr);
 					}
 				})
 			})

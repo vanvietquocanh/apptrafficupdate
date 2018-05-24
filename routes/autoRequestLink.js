@@ -78,6 +78,11 @@ router.post('/', function(req, res, next) {
 						requestApi.conditionPush = false;
 					}
 				} 
+				if(Object.keys(network.custom)[j].trim()==="paySet"){
+					if(typeof dataLead==="string"){
+						dataLead = parseFloat(dataLead)
+					}
+				}
 				if(dataLead==null||dataLead===undefined){
 					switch (Object.keys(network.custom)[j].trim()) {
 						case "imgSet":
@@ -207,11 +212,15 @@ router.post('/', function(req, res, next) {
 		if(path!==undefined){
 			if(path.indexOf("market://")!==-1||path.indexOf("play.google.com")!==-1){
 	 			if(!(/\%3D/.test(path))){
-	 				if(path.indexOf("market://")!==-1){
-		 				id += path.split("id=")[1].split("&")[0];
-		 			}else{
-		 				id += path.split("id=")[1].split("&")[0];
-		 			}
+	 				try {
+	 					if(path.indexOf("market://")!==-1){
+			 				id += path.split("id=")[1].split("&")[0];
+			 			}else{
+			 				id += path.split("id=")[1].split("&")[0];
+			 			}
+	 				} catch(e) {
+	 					id = "";
+	 				}
 	 			}else{
 	 				if(/referrer/.test(path)){
 	 					if(path.split(/\?id=/).length>1){
@@ -245,7 +254,7 @@ router.post('/', function(req, res, next) {
 					"platformSet"    : (requestApi.regularAndroid.test(requestApi.dataHasOffer[element].Offer.preview_url))?"android":"ios",
 					"nameSet"    	 : requestApi.dataHasOffer[element].Offer.name,
 					"urlSet"	 	 : network.custom.urlSet.split("{")[0]+requestApi.dataHasOffer[element].Offer.id+network.custom.urlSet.split("}")[1],
-					"paySet" 		 : requestApi.dataHasOffer[element].Offer.default_payout,
+					"paySet" 		 : parseFloat(requestApi.dataHasOffer[element].Offer.default_payout),
 					"countrySet"     : requestApi.dataHasOffer[element].Offer.name.split("[").join("").split("]").join("").split("\t").join(" ").split("_").join(" ").split("-").join(" ").split(",").join(" ").split("\t").join(" ").split("(").join(" ").split(")").join(" ").split(":").join(" ").split(" "),
 					"prevLink" 	 	 : requestApi.dataHasOffer[element].Offer.preview_url,
 					"descriptionSet" : "",

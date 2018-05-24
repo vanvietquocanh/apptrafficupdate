@@ -13,17 +13,23 @@ router.get('/:parameter', function(req, res, next) {
 			if(req.query.country){
 				query.country = req.query.country.toUpperCase()
 			}
-			db.collection("SSH").findOne(query, (err, result)=>{
-				if(!err){
-					if(result){
-						var dataRespon = "<br>";
-						result.data.forEach( function(element, index) {
-							dataRespon += result.data[index].split(",").join(" ")+"<br>";
-						});
-						res.send(dataRespon);
-					}else {
-						res.send("null");
+			db.collection("SSH").find(query).toArray((err, result)=>{
+				try {
+					if(!err){
+						if(result.length>0){
+							var dataRespon = "<br>";
+							result.forEach( function(element, index) {
+								element.data.forEach( function(ele, i) {
+									dataRespon += ele.split(",").join(" ")+"<br>";
+								});
+							});
+							res.send(dataRespon);
+						}else {
+							res.send("null");
+						}
 					}
+				} catch(e) {
+					res.send(e);
 				}
 			})
 		})

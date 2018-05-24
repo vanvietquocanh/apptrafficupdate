@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 				assert.equal(null,err);
 				if(!err){
 					if(result){
-						var link = `${app.urlSet}+&${result.postback}=${strRandom}`;
+						var link = `${app.urlSet}&${result.postback}=${strRandom}`;
 						res.redirect(link);
 					}
 				}else{
