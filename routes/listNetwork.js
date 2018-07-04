@@ -12,13 +12,13 @@ router.post('/', function(req, res, next) {
 			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
 					db.collection('network').find().toArray((err,result)=>{
+						assert.equal(null,err);
+						db.close();
 						if(!err){
 							res.send(result)
 						}else {
 							res.send(err)
 						}
-					assert.equal(null,err);
-					db.close();
 				});
 			});
 		}catch(e){
@@ -33,15 +33,15 @@ router.post('/', function(req, res, next) {
 		mongo.connect(pathMongodb,function(err,db){
 			assert.equal(null,err);
 				db.collection('userlist').findOne(query, function(err,result){
+				assert.equal(null,err);
+				db.close();
 					if(result.admin){
 						getDB()
 					}
-				assert.equal(null,err);
-				db.close();
 			});
 		});
 	} catch(e) {
-		res.redirect("/");
+		res.send("error");
 		res.end();
 	}
 });

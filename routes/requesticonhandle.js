@@ -125,22 +125,22 @@ router.post('/', function(req, res, next) {
   									query.nameNetworkSet = new RegExp(req.body.network, "i");
   								}
 				  				db.collection("offer").find(query).toArray((err, result)=>{
-					  				if(!err){
+					  				if(!err){db.close();
 					  					if(result.length>0){
 					  						dataResponse = result;
 						  					checkIconApp(dataResponse);
 					  					}
-					  				}else {
+					  				}else {db.close();
 					  					res.send("error");
 					  				}
 					  			})
-				  			} catch(e) {
+				  			} catch(e) {db.close();
 				  				res.send("error");
 				  			}
-  						}else{
+  						}else{db.close();
 							res.send("error");
   						}
-  					}else{
+  					}else{db.close();
 						res.send("error");
   					}
   				})

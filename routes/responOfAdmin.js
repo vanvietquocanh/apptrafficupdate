@@ -21,6 +21,7 @@ router.post('/', function(req, res, next) {
 	  				}
 	  			}
 	  			db.collection("userlist").updateOne(queryFindUser, dataChange, (err, result)=>{
+	  				db.close();
 	  				if(!err){
 	  					res.send(req.body);
 	  				}else{
@@ -46,15 +47,16 @@ router.post('/', function(req, res, next) {
 								})
 							})
 						}else{
-							res.redirect("/")
+							db.close();
+							res.send("error")
 						}
 					});
 			});
 		} catch(e) {
-			res.redirect("/")
+			res.send("error")
 		}
 	}else{
-		res.redirect("/")
+		res.send("error")
 	}
 });
 

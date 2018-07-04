@@ -22,17 +22,20 @@ router.get('/', function(req, res, next) {
 							};
 							db.collection('useradd').find(querysearchUser).toArray((err, result)=> {
 								if(!err){
+									db.close();
 									res.send(result)
 								}
 							});					
 						}else{
+							db.close();
 							res.redirect("/")
 						}
-						assert.equal(null,err);
-						db.close();
 					});
 			});
 		} catch(e) {
+			if(db){
+				db.close();
+			}
 			res.redirect("/")
 		}
 	}else{

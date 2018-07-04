@@ -32,14 +32,19 @@ router.post('/', function(req, res, next) {
 									db.collection("useradd").updateOne(query, update, (err,result)=>{
 										if(!err) {
 											callBack();
+										}else{
+											db.close();
+											res.send(err);
 										}
 									})
 								}
 							}else{
+								db.close();
 								res.send("error");
 							}
 						}else{
-							res.redirect("/");
+							db.close();
+							res.send("error");
 						}
 					})				
 				});

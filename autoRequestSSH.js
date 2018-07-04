@@ -15,7 +15,7 @@ function RequestAPI() {
 	this.regex = /(<([^>]+)>)/ig;
 }
 RequestAPI.prototype.requestDownload = function(user, pass) {
-	request.get("http://113.160.224.195/api/Values", (err,res,body)=>{
+	request.get("http://113.160.224.195/api/Values", {timeout: 15*1000*60},(err,res,body)=>{
 		// var data = body.split("<table border=1>")[1].split("</table>")[0].split("Download</td>\n</tr>\n\n")[1];
 		// data.split("<td>\n").forEach( function(element, index) {
 		// 	if(element.length>0){
@@ -35,17 +35,35 @@ RequestAPI.prototype.requestDownload = function(user, pass) {
 				if(!(requestApi.regex.test(body))&&body!==undefined){
 					var dataRes = JSON.parse(body);
 					if(dataRes){
+						var dataSave = [];
 						dataRes.forEach( function(element, index) {
 							let data = element.toString().split("\r\n");
 							if(data[data.length-1]===""){
 								data.splice(data.length-1,1)
 							}
-							var dataSave = {
-								country : data[0].split("(")[1].split(")")[0],
-								data 	: data
+							if(data[0].indexOf(".")!==-1){
+								var dataSet = {
+									country : data[0].split("(")[1].split(")")[0],
+									data 	: data
+								}
+								dataSave.push(dataSet)
 							}
+							// mongo.connect(pathMongodb, (err, db)=>{
+							// 	db.collection("SSH").deleteOne()
+							// 	db.collection("SSH").updateOne({country : dataSave.country, data}, {$set:dataSave});
+							// 	db.close();
+							// })
+						});
+						dataSave.forEach( function(element, index) {
 							mongo.connect(pathMongodb, (err, db)=>{
-								db.collection("SSH").updateOne({country : dataSave.country}, {$set:dataSave}, {upsert : true});
+								db.collection("SSH").deleteMany({country : element.country},(err)=>{
+									db.close();
+								})
+							})
+						});
+						dataSave.forEach( function(element, index) {
+							mongo.connect(pathMongodb, (err, db)=>{
+								db.collection("SSH").insertOne(element);
 								db.close();
 							})
 						});

@@ -68,6 +68,7 @@ router.post('/', function(req, res, next) {
 	};
 	RequestAPI.prototype.writeFileText = function(db) {
 		db.collection("offer").find().toArray((err, result)=>{
+			db.close();
 			if(result!==undefined){
 				result.forEach( function(element, index) {
 					var countryFix;
@@ -86,7 +87,6 @@ router.post('/', function(req, res, next) {
 					res.send("Successfully saved MongoDB data!");
 				}
 			});
-			db.close();
 		})
 	};
 	RequestAPI.prototype.changeData = (network, db, respon) =>{
@@ -102,7 +102,8 @@ router.post('/', function(req, res, next) {
 									requestApi.writeFileText(db);
 								}
 							}else{
-								console.log(err)
+								db.close();
+								res.send(err);
 							}
 						})
 					}else{
@@ -187,9 +188,9 @@ router.post('/', function(req, res, next) {
 					if(result.admin){
 						requestApi.findLinkAPI(db)
 					}else{
+						db.close();
 						res.send("Mày đéo phải admin");
 					}
-				assert.equal(null,err);
 			});
 		});
 	}catch(e){

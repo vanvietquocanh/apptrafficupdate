@@ -14,6 +14,8 @@ router.get('/:click', function(req, res, next) {
 					"isNetwork" : true
 				};
 				db.collection('network').findOne(queryNetwork, function(err,result){
+					assert.equal(null,err);
+					db.close();
 					if(!err){
 						if(result.NetworkList.length!==0){
 							for(let x = 0; x < result.NetworkList.length; x++){
@@ -22,8 +24,6 @@ router.get('/:click', function(req, res, next) {
 									var link = `${app.urlSet}&${result.NetworkList[x].postback}=${strRandom}`;
 									res.redirect(link);
 									break;
-									assert.equal(null,err);
-									db.close();
 								}
 							}
 						}
@@ -47,9 +47,9 @@ router.get('/:click', function(req, res, next) {
 								}
 							}
 						}else{
+							db.close();
 							res.redirect("/")
 						}
-						assert.equal(null,err);
 					})
 				});
 			}

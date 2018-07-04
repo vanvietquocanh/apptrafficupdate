@@ -16,6 +16,7 @@ router.get('/', function(req, res, next) {
  			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
 					db.collection('userlist').findOne(query,function(err,result){
+						db.close();
 						var download, myOffer;
 						if(result.admin){
 							myOffer = ""
@@ -28,9 +29,7 @@ router.get('/', function(req, res, next) {
 			                                <a href="/myoffers" class="waves-effect"><i class="ti ti-layout-list-post"></i> <span> My Offers </span></span></a>
 			                            </li>`;
 						}
-						    renderPage(download, myOffer)
-						assert.equal(null,err);
-						db.close();
+						renderPage(download, myOffer)
 					});
 			});
 		} catch(e) {

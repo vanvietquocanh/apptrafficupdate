@@ -37,21 +37,23 @@ router.post("/", (req, res, next)=>{
 												}	
 								db.collection("conversion").aggregate([{$match:{$or:result}}, {$group:{_id: {"nameSet" : "$appName", "index" : "$idOffer", "platform" : "$platfrom" , "pay" : "$pay", "country" : "$country", "networkName" : "$networkName"}, countConversion :{$sum:1}, revenue :{$sum: "$pay" }}}],(err, conversion)=>{
 									if(!err){
+										db.close()
 										res.send(conversion)
 									}
 								})
 							}
 						});
-					}else{	
-						res.redirect("/")
+					}else{
+						db.close()
+						res.send(err)
 					}
 				})
 			})
 		} catch(e) {
-			console.log(e);
+			res.send(e)
 		}
 	}else{
-		res.redirect("/");
+		res.send("error user")
 	}
 })
 module.exports = router;

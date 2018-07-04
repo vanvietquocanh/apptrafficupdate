@@ -23,7 +23,6 @@ router.post('/', function(req, res, next) {
 				db.close();
 			});
 		}catch(e){
-			console.log(e)
 			res.redirect("/")
 			res.end();
 		}	

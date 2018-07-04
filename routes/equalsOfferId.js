@@ -59,6 +59,7 @@ router.get('/:value', function(req, res, next) {
 				    	}
 						db.collection('userlist').updateOne(query, dataSave, {upsert: true}, (err,result)=>{
 							if(!err){
+								db.close();
 								console.log("ok")
 							}
 						})
@@ -112,6 +113,7 @@ router.get('/:value', function(req, res, next) {
 						"isNetwork" : true
 					}
 					db.collection("userlist").findOne(query, (err, result)=>{
+						db.close();
 						equalsOffer.requetEmpty(result.NetworkList, querySearchEmpty)
 					})
 				})
@@ -133,7 +135,7 @@ router.get('/:value', function(req, res, next) {
 				equalsOffer.findLinkAPI(querySearchEmpty);
 			},10800000);
 		} catch(e) {
-			console.log(e);
+			res.send(e);
 		}
 	}
 });

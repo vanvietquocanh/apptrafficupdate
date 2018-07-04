@@ -67,6 +67,7 @@ router.get('/', function(req, res, next) {
 					                            </li>`;
 							if(result.master){
 								db.collection('userlist').updateOne({"idFacebook": req.user.id}, {$set:{profile: req.user}}, {upsert:true}, (err,result)=>{
+									db.close();
 									var myOffer = `<li class="has_sub">
 						                                <a href="/liveoffer" class="waves-effect"><i class="ti ti-layout-list-post"></i> <span> Live Offers </span></span></a>
 						                            </li>`
@@ -76,6 +77,7 @@ router.get('/', function(req, res, next) {
 								})
 							}else if(result.member){
 								db.collection('userlist').updateOne({"idFacebook": req.user.id}, {$set:{profile: req.user}}, {upsert:true}, (err,result)=>{
+									db.close();
 									offerLive = "";
 									var myOffer = `<li class="has_sub">
 					                                <a href="/myoffers" class="waves-effect"><i class="ti ti-layout-list-post"></i> <span> My Offers </span></span></a>
@@ -98,23 +100,25 @@ router.get('/', function(req, res, next) {
                                     let icon = `<li class="has_sub">
 					                                <a href="/iconhandle" class="waves-effect"><i class="fa fa-picture-o"></i> <span> Icon Handle</span></a>
 					                            </li>`;
-                                    mongo.connect(pathMongodb, (err, db)=>{
-	                                    db.collection("network").find().toArray( (err, net)=>{
-											net.forEach( function(element, index) {
-												if(netName[`${element.name}`]===undefined){
-													netName[`${element.name}`] = element.name;
-												}
-											});
-											Object.keys(netName).forEach( function(element, index) {
-												selNetworks += `<option value="${element}">${element}</option>`;
-											});
-											selNetworks += `</select>`;
-				                      		renderPage("index", admin, download, myOffer, addOffer, selNetworks, icon);
-				                    	})
-                                    })
+                                    db.collection("network").find().toArray( (err, net)=>{
+                                    	assert.equal(null,err);
+										db.close();
+										net.forEach( function(element, index) {
+											if(netName[`${element.name}`]===undefined){
+												netName[`${element.name}`] = element.name;
+											}
+										});
+										Object.keys(netName).forEach( function(element, index) {
+											selNetworks += `<option value="${element}">${element}</option>`;
+										});
+										selNetworks += `</select>`;
+			                      		renderPage("index", admin, download, myOffer, addOffer, selNetworks, icon);
+			                    	})
 								})
 							}else{
 								db.collection('userlist').updateOne({"idFacebook": req.user.id}, {$set:{profile: req.user}}, {upsert:true}, (err,result)=>{
+									assert.equal(null,err);
+									db.close();
 									res.render("error",{
 										error:{
 											status: "",
@@ -123,10 +127,9 @@ router.get('/', function(req, res, next) {
 									})
 								})
 							}
-							assert.equal(null,err);
-							db.close();
 						}else{
 							db.collection('userlist').insertOne(dataInsert, (err,result)=>{
+								db.close();
 								res.render("error",{
 									error:{
 										status: "",
@@ -136,12 +139,9 @@ router.get('/', function(req, res, next) {
 								res.end();
 							})
 						};
-						assert.equal(null,err);
-						db.close();
 					});
 			});
 		}catch(e){
-			console.log(e)
 			res.redirect("/")
 			res.end();
 		}

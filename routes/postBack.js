@@ -12,12 +12,12 @@ router.get('/:parameter', function(req, res, next) {
 				data.enable = false;
 				db.collection("conversion").insertOne(data, (err, result)=>{
 					if(!err){
+						db.close();
 						res.send(JSON.stringify({"message": "Ok!"}))
 					}else {
+						db.close();
 						res.send("error")
 					}
-					assert.equal(null,err);
-					db.close();
 				})
 			}
 			var query = {
@@ -30,15 +30,19 @@ router.get('/:parameter', function(req, res, next) {
 						// req.socket.emit("NewCvr","hello");					
 						savePostback(result, db)
 					}else{
+						db.close();
 						res.send("error")
 					}
 				});
 			});
 		} catch(e) {
-			console.log(e);
+			if(db){ 
+				db.close();
+			}
+			res.send("error")
 		}
 	}else{
-		res.end();
+		res.redirect("/");
 	}
 });
 

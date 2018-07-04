@@ -25,8 +25,11 @@ router.get('/:parameter', function(req, res, next) {
 				query[`dataOffer.nameNetworkSet`] = req.query.network.toLowerCase();
 			}
 			db.collection("Offerlead").find(query).skip(skip).limit(500).toArray((err, result)=>{
+				db.close();
 				if(!err){
 					res.send(result);
+				}else{
+					res.send(err)
 				}
 			})
 		})

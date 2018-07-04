@@ -1,4 +1,4 @@
-var express = require('express');
+	var express = require('express');
 var router = express.Router();
 const mongo = require('mongodb');
 const assert = require('assert');
@@ -34,6 +34,7 @@ var smartLink = function (condition) {
 			mongo.connect(pathMongodb,(err, db)=>{
 				if(!err){
 					db.collection("offerLead").updateOne(query, data,{ upsert: true },(err, result)=>{
+						db.close();
 					});
 				}
 			})
@@ -96,6 +97,7 @@ var smartLink = function (condition) {
 		mongo.connect(pathMongodb,function(err,db){
 			assert.equal(null,err);
 			db.collection('offer').find(query).toArray((err, result)=> {
+				db.close();
 				for (let i = 0; i < result.length; i++) {
 					for (var j = 0; j < country.length; j++) {
 						if(result[i].countrySet.indexOf(country[j].toUpperCase())!==-1){

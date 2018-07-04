@@ -14,6 +14,8 @@ router.get('/', function(req, res, next) {
  			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
 					db.collection('userlist').findOne(query,function(err,result){
+						assert.equal(null,err);
+						db.close();
 						var download, myOffer, memSel, icon="";
 						if(result.admin){
 							icon = `<li class="has_sub">
@@ -55,12 +57,13 @@ router.get('/', function(req, res, next) {
 			                            </li>`;
 						}
 						    renderPage(download, myOffer, memSel, icon)
-						assert.equal(null,err);
-						db.close();
 					});
 			});
 		} catch(e) {
-			res.redirect("/")
+			if(db){
+				db.close();
+			}
+			res.send("error")
 		}
 	  	function renderPage(download, myOffer, memSel, icon) {
 	  		var admin =`<li>
@@ -79,7 +82,7 @@ router.get('/', function(req, res, next) {
 			})
 	  	}
 	}else{
-		res.redirect("/")
+		res.send("error")
 	}
 });
 

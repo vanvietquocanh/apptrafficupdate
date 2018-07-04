@@ -16,18 +16,24 @@ router.post("/", (req, res, next)=>{
 				db.collection("userlist").findOne(query, (err, result)=>{
 					if(result.admin){
 						db.collection("conversion").find({"id" : req.body.idUser}).skip(Number(req.body.start)).limit(500).toArray((err,result)=>{
+							assert.equal(null,err);
+							db.close();
 							res.send(result);
 						})
-					}else{	
+					}else{
+						db.close();
 						res.redirect("/")
 					}
 				})
 			})
 		} catch(e) {
-			console.log(e);
+			if(db){
+				db.close();
+			}
+			res.send(e)
 		}
 	}else {
-		res.redirect("/")
+		res.send("error")
 	}
 })
 module.exports = router;

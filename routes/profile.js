@@ -9,13 +9,14 @@ const pathMongodb = require("./pathDb");
 router.get('/', function(req, res, next) {
 	if(req.user){
 	  	try {
-	  		console.log(req.user)
 			var query = {
 					"idFacebook": req.user.id
  				}
  			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
 					db.collection('userlist').findOne(query,function(err,result){
+						assert.equal(null,err);
+						db.close();
 						var download, myOffer;
 						if(result.admin){
 							download     = `<li class="has_sub">
@@ -32,13 +33,14 @@ router.get('/', function(req, res, next) {
 			                                <a href="/myoffers" class="waves-effect"><i class="ti ti-layout-list-post"></i> <span> My Offers </span></span></a>
 			                            </li>`
 						}
-						    renderPage(download, myOffer)
-						assert.equal(null,err);
-						db.close();
+						renderPage(download, myOffer)
 					});
 			});
 		} catch(e) {
-			res.redirect("/")
+			if(db){
+				db.close();
+			}
+			res.send(e)
 		}
 	  	function renderPage(download, myOffer) {
 	  		var admin =`<li>

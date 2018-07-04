@@ -39,6 +39,7 @@ router.post('/', function(req, res, next) {
 								"idFacebook" : req.body.affId
 							}
 							db.collection("userlist").findOne(query2, (err, result)=> {
+								db.close();
 								if(!err){
 									result.request.forEach((el, index)=>{
 										if(el.app.index == req.body.app.index){

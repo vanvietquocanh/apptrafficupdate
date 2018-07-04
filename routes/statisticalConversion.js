@@ -23,6 +23,7 @@ router.post('/', function(req, res, next) {
 							queryFindInfoUser.push(element._id);
 						});
 						db.collection("userlist").find({"idFacebook" : {$in : queryFindInfoUser}}).toArray((err, result)=>{
+							db.close();
 							var dataRes = {
 								user 	   : result,
 								conversion : conversion
@@ -43,7 +44,11 @@ router.post('/', function(req, res, next) {
 						if(!err){
 							if(result.admin){
 								findData(db)
+							}else{
+								db.close();
 							}
+						}else{
+							db.close();
 						}
 					})
 			})

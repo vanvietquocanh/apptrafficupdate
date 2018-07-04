@@ -35,6 +35,7 @@ router.post('/', function(req, res, next) {
 							}
 							var data = [];
 							db.collection('userlist').find(queryRequest).toArray((err, result)=> {
+								db.close();
 								if(!err){
 									if(result.length>0){
 										result.forEach(function(element, index) {
@@ -53,21 +54,18 @@ router.post('/', function(req, res, next) {
 									data: data.splice(req.body.start, 500)
 								}
 								res.send(dataRes)
-								assert.equal(null,err);
-								db.close();
 							});
 						}else{
-							res.redirect("/")
+							db.close();
+							res.send("error")
 						}
-						assert.equal(null,err);
-						db.close();
 					});
 			});
 		}else{
-			res.redirect("/")
+			res.send("error")
 		}
 	} catch(e) {
-		console.log(e);
+		res.send("error")
 	}
 });
 

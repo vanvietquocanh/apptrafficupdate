@@ -17,6 +17,7 @@ router.post('/', function(req, res, next) {
 					db.collection('userlist').findOne(query,function(err,result){
 						if(result.admin){
 							db.collection("useradd").updateOne(req.body.query, {$set:req.body.change}, (err, result)=>{
+								db.close();
 								if(!err){
 									res.send(req.body.change);
 								}else{
@@ -24,17 +25,17 @@ router.post('/', function(req, res, next) {
 								}
 							})				
 						}else{
-							res.redirect("/")
+							res.send(err)
 						}
 						assert.equal(null,err);
 						db.close();
 					});
 			});
 		} catch(e) {
-			res.redirect("/")
+			res.send(e)
 		}
 	}else{
-		res.redirect("/")
+		res.send("error")
 	}
 });
 

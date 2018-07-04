@@ -27,15 +27,13 @@ router.post('/', function(req, res, next) {
 					}
 				}
 				db.collection('offer').find(query).skip(Number(req.body.start)).limit(500).toArray((err,result)=>{
-						console.log(result, err);
+					db.close();
 					if(!err){
 						if(result.length>0){
 							res.send(result)
 						}else{
 							res.send("")
 						}
-						assert.equal(null,err);
-						db.close();
 					}
 				});
 			}
@@ -48,12 +46,16 @@ router.post('/', function(req, res, next) {
 						if(result.admin){
 							responseReportClick(db)
 						}else {
-							res.redirect("/")
+							db.close();
+							res.send("error")
 						}
 					})
 			})
 		} catch(e) {
-			console.log(e);
+			if(db){
+				db.close();
+			}
+			res.send("error")
 		}
 	}else{
 		res.redirect("/")

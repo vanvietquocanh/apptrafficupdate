@@ -11,6 +11,7 @@ router.get('/', function(req, res, next) {
 		mongo.connect(pathMongodb,function(err,db){
 			assert.equal(null,err);
 				db.collection('network').find().toArray((err,result)=>{
+					db.close();
 					if(!err){
 						if(result.length>0){
 							var dataRes = []
@@ -24,11 +25,12 @@ router.get('/', function(req, res, next) {
 							res.send([])
 						}
 					}
-				assert.equal(null,err);
-				db.close();
 				});
 		});
 	} catch(e) {
+		if(db){
+			db.close();
+		}
 		res.send(e);
 	}	
 });

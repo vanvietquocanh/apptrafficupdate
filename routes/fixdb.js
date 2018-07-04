@@ -22,13 +22,17 @@ router.get("/", (req, res, next)=>{
 								$set: {pay : parseFloat(result[i].pay)}
 							}
 							db.collection("conversion").updateOne(query, data, (err, result)=>{
-								console.log(err, result);
+								assert.equal(null,err);
 							})
 						}
+						db.close();
 						res.send(result)
 					})
 				})
 		} catch(e) {
+			if(db){
+				db.close();
+			}
 			console.log(e);
 		}
 	}else{

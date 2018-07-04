@@ -10,12 +10,16 @@ var geoip = require('geoip-lite');
 router.get('/', function(req, res, next) {
 	function save(dataUpdate, link) {
 		mongo.connect(pathMongodb, (err, db)=>{
-			assert.equal(null,err);
-			db.collection('report').insert(dataUpdate, { ordered: false }, function(err,result){
-				res.redirect(link)
-				res.end();
-			db.close();
-			})		
+			try {
+				assert.equal(null,err);
+				db.collection('report').insert(dataUpdate, { ordered: false }, function(err,result){
+					db.close();
+					res.redirect(link)
+					res.end();
+				})		
+			} catch(e) {
+				console.log(e);
+			}
 		})
 	}
 	function redirectAPI(app, data, person, geo) {
@@ -53,23 +57,22 @@ router.get('/', function(req, res, next) {
 			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
 					db.collection('network').find().toArray( function(err,result){
-						if(!err){
-							if(result.length!==0){
-								for(let x = 0; x < result.length; x++){
-									if(app.nameNetworkSet.toLowerCase().indexOf(result[x].name.toLowerCase())!==-1){
-										try {
-											var link = app.urlSet+"&"+result[x].postback+"="+strRandom;
-											save(dataUpdate,link)
-										} catch(e) {
-											res.send(e)
-										}
-										break;
+					db.close();
+					if(!err){
+						if(result.length!==0){
+							for(let x = 0; x < result.length; x++){
+								if(app.nameNetworkSet.toLowerCase().indexOf(result[x].name.toLowerCase())!==-1){
+									try {
+										var link = app.urlSet+"&"+result[x].postback+"="+strRandom;
+										save(dataUpdate,link)
+									} catch(e) {
+										res.send(e)
 									}
+									break;
 								}
 							}
 						}
-					assert.equal(null,err);
-					db.close();
+					}
 				});
 			});
 		} catch(e) {
@@ -80,7 +83,7 @@ router.get('/', function(req, res, next) {
 		function checkIpAddress(app, geoVal){
 			return app.countrySet.indexOf(geoVal)!==-1;
 		}
-		function checkPostback(app, person, db) {
+		function checkPostback(app, person) {
 			var geo = geoip.lookup(req.headers["x-real-ip"]);
 			if(geo){
 				if(checkIpAddress(app, geo.country)){
@@ -101,10 +104,10 @@ router.get('/', function(req, res, next) {
 						redirectAPI(app, app, person, geo.country)
 					}
 				}else{
-					res.send("We're sorry, this offer is not currently available. Please try again later or contact customer support for further information")
+					res.send("We're sorry, this offer is not currently available. Please try again later or contact customer support for further information");
 				}
 			}else{
-				res.send("We're sorry, this offer is not currently available. Please try again later or contact customer support for further information")
+				res.send("We're sorry, this offer is not currently available. Please try again later or contact customer support for further information");
 			}
 		}
 	} catch(e) {
@@ -117,11 +120,12 @@ router.get('/', function(req, res, next) {
 			enable  : false
 		}
 		db.collection("conversion").find(query).toArray((err, result)=>{
-			if(result.length === 0&&app!==null){
-				checkPostback(app, person, db);
-			}else{
-				res.send("This blacklisted ip is already banned from our system. Please contact to your ISP for re-cleaning it")
-			}
+			db.close();
+			// if(result.length === 0&&app!==null){
+				checkPostback(app, person);
+			// }else{
+				// res.send("This blacklisted ip is already banned from our system. Please contact to your ISP for re-cleaning it");
+			// }
 		})
 	}
 	function checkApp(profile, db) {
@@ -135,11 +139,13 @@ router.get('/', function(req, res, next) {
 						checkInCvr(result, profile, db);
 					}
 				}else{
-					res.redirect("/")
+					db.close();
+					res.redirect("/");
 				}
 			})
 		}else{
-			res.send("error")
+			db.close();
+			res.send("error");
 		}
 	}
 	try {
@@ -148,21 +154,23 @@ router.get('/', function(req, res, next) {
 		}
 		mongo.connect(pathMongodb,function(err,db){
 			assert.equal(null,err);
-				db.collection('userlist').findOne(query, function(err,result){	
-					if(!err){
-						if(result){
-							if(result.profile !== undefined&&!(isNaN(req.query.offer_id))){
-								checkApp(result, db)
-							}else{
-								res.redirect("/")
-							}
+			db.collection('userlist').findOne(query, function(err,result){
+				if(!err){
+					if(result){
+						if(result.profile !== undefined&&!(isNaN(req.query.offer_id))){
+							checkApp(result, db)
 						}else{
+							db.close();
 							res.redirect("/")
 						}
 					}else{
+						db.close();
 						res.redirect("/")
 					}
-				assert.equal(null,err);
+				}else{
+					db.close();
+					res.redirect("/")
+				}
 			});
 		});
 	} catch(e) {

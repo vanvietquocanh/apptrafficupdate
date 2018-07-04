@@ -21,7 +21,11 @@ router.post('/:param', function(req, res, next) {
 				db.collection("offer").findOne(query,(err, offer)=>{
 					db.collection(namedb).find({isCount:true}).toArray((err, re)=>{
 						if(re.length<1){
-							db.collection(namedb).insertOne({isCount:true, count:0})
+							db.collection(namedb).insertOne({isCount:true, count:0},(err,result)=>{
+								db.close();
+							})
+						}else{
+							db.close();
 						}
 						try {
 							if(req.body.status === "success"&&offer){
@@ -58,28 +62,36 @@ router.post('/:param', function(req, res, next) {
 								req.body.status = "fail";
 							}
 						} catch(e) {
-							console.log(e);
+							db.close();
+							res.send(e);
 						}
 						req.body.lead = req.body.lead.split(".");
 						req.body.url = req.body.url.split(" ").join("&");
 						req.body.dataOffer = offer;
 						req.body.index = query.index;
-						db.collection(namedb).updateOne(query, req.body, { upsert:true }, function(err,result){
-							if(!err){
-								db.collection("Offerlead").updateOne(query, req.body, { upsert:true }, function(err,result){
-									if(!err){
-										res.send("ok");
-										res.end();
-									}
-									assert.equal(null, err);
-									db.close();
-								})
-							}
-						});
+						mongo.connect(pathMongodb,(err, db)=>{
+							db.collection(namedb).updateOne(query, req.body, { upsert:true }, function(err,result){
+								if(!err){
+									db.collection("Offerlead").updateOne(query, req.body, { upsert:true }, function(err,result){
+										assert.equal(null, err);
+										db.close();
+										if(!err){
+											res.send("ok");
+											res.end();
+										}else{
+											res.send("eror")
+										}
+									})
+								}
+							});
+						})
 					})
 				})
 			});
 		}catch(e){
+			if(db){
+				db.close();
+			}
 			res.send(e)
 			res.end();
 		}

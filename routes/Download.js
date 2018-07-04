@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
 				mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
 					db.collection('userlist').findOne(query,function(err,result){
+						db.close();
 						if(result.admin){
 							fs.readFile("/root/trafficapplicattion/OfferList.txt", "utf8", (err, data)=>{
 								if(err){
@@ -31,8 +32,6 @@ router.get('/', function(req, res, next) {
 						}else{
 							res.redirect("/")
 						}
-						assert.equal(null,err);
-						db.close();
 					});
 			});
 		}else{

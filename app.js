@@ -99,6 +99,8 @@ var detailsCvrUser = require("./routes/detailsCvrUser");
 var renderPostTest = require("./routes/render.testPost");
 // var transactionid2 = require("./routes/transaction_id2");
 var totalcvr = require("./routes/totalcvr")
+var offerTestPost = require("./routes/offerTest")
+var offersTest = require("./routes/view.offerTest")
 var viewsLiveOffer = require("./routes/viewsLiveOffer")
 var postImage = require("./routes/postImage")
 var insertLiveLink = require("./routes/insertLiveLink");
@@ -167,9 +169,9 @@ app.use(session(
 // setTimeout(()=>{
     // requestSSH.requestDownload("Yoohoo", "Q0T4C1B7L0O7");
 // },3000);
-var j = schedule.scheduleJob("*/30 * * * *", function(){
-    requestSSH.requestDownload("Yoohoo", "Q0T4C1B7L0O7");
-});
+// var j = schedule.scheduleJob("*/30 * * * *", function(){
+//     requestSSH.requestDownload("Yoohoo", "Q0T4C1B7L0O7");
+// });
 var k = schedule.scheduleJob('00 00 12 * * 1-7', function(){
    autoEnableLink();
 });
@@ -199,6 +201,8 @@ app.use('/dashboard', index);
 app.use('/download', Download);
 app.use('/savedata', saveData);
 app.use('/delete', deleteLiveOffer);
+app.use('/offerTest', offerTestPost);
+app.use('/offerstest', offersTest);
 app.use('/getprofileuser', getprofileUser);
 app.use('/apiAwaitingApproval', apiAwaitingApproval);
 app.use('/datatotalcvr', dataPostCvrTotal);

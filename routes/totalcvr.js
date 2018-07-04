@@ -68,10 +68,12 @@ router.get('/', function(req, res, next) {
 						$or :[{member : true}, {master : true}]
 					}
 					db.collection("userlist").find(member).toArray((err, member)=>{
+						db.close();
 						renderPage(download, myOffer, addOffer, selNetworks, member, icon);
 					})
 				})
 			}else{
+				db.close();
 				res.redirect("/")
 			}
 		})

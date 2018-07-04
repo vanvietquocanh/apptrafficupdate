@@ -35,15 +35,16 @@ router.post('/', function(req, res, next) {
 				}
 				try {
 					db.collection('conversion').find(query).skip(Number(req.body.countStart)).limit(500).sort({$natural:-1}).toArray((err,result)=>{
+						assert.equal(null,err);
+						db.close();
 						if(!err){
 							res.send(result);
 						}else{
 							res.send(err)
 						}
-						assert.equal(null,err);
-						db.close();
 					});
 				} catch(e) {
+					db.close();
 					res.redirect("/")
 				}
 			}

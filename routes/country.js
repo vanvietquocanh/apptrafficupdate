@@ -1,1 +1,1 @@
-module.exports = ["au", "kr", "de", "in", "id", "tw", "jp", "vn", "th", "br", "es", "tr", "ru", "fr", "sa", "ae", "kw", "mx", "cn", "us", "gb","uk"];
+module.exports = ["ar", "sa", "sg", "id", "in", "hk", "tw", "my", "ph", "kr", "eg", "tr", "es", "ru", "jp", "vn", "br", "de", "cn", "th", "fr","ae","uk","us"];

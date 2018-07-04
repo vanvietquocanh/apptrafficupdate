@@ -31,6 +31,7 @@ router.get('/:value', function(req, res, next) {
 									queryFindInfoApp.push(Number(dataCVR[i].index));
 								}
 								db.collection("offer").find({"index" : {$in: queryFindInfoApp}}).toArray((err, data)=>{
+									db.close();
 									if(!err){
 										for (let i = 0; i < data.length; i++) {
 											for(let j = 0; j < dataCVR.length; j++){

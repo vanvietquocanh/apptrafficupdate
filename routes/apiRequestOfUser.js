@@ -36,13 +36,16 @@ router.post('/', function(req, res, next) {
 								}
 							}
 							db.collection('userlist').updateOne(query, dataSet, function(err,result){
+								db.close();
 								if(!err){
 									res.send("ok")
 								}else{
 									res.send(err);
 								}
-								db.close();
 							});
+						}else{
+							db.close();
+							res.send(err);
 						}
 					});
 				assert.equal(null,err);

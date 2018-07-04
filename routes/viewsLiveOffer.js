@@ -19,6 +19,8 @@ router.get('/', function(req, res, next) {
 						var selNetworks = `<select class="select-drop-blue sel-mem" name="sel-Networks" id="sel-Networks">
                                                 <option value="all">Network List</option>`;
 						db.collection("network").find().toArray((err, net)=>{
+							assert.equal(null,err);
+							db.close();
 							net.forEach( function(element, index) {
 								if(netName[`${element.name}`]===undefined){
 									netName[`${element.name}`] = element.name;
@@ -68,8 +70,6 @@ router.get('/', function(req, res, next) {
 			                memSel   = "";
 						}
 							renderPage(download, myOffer, memSel, selNetworks, addOffer, icon)
-						assert.equal(null,err);
-						db.close();
 					});
 				});
 			});

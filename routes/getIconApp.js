@@ -21,20 +21,25 @@ router.get('/:value', function(req, res, next) {
 						if(!err){
 							db.collection("offer").updateMany({idApp:id}, {$set:{imgSet:dataApp.image}}, (err,result)=>{
 								db.collection("Offerlead").updateMany({idApp:id}, {$set:{imgSet:dataApp.image}}, (err,result)=>{
+									db.close();
 									res.send(dataApp);
 								})
 							})
 						}else{
+							db.close();
 							res.send(err)
 						}
-						db.close();
 					})
 				})
 				.catch(err=>{
+					db.close();
 					res.send("error")
 				})
 			})
 		} catch(e) {
+			if(db){
+				db.close();
+			}
 			res.send("error")
 		}
 	}
@@ -59,23 +64,29 @@ router.get('/:value', function(req, res, next) {
 									if(!err){
 										db.collection("offer").updateMany({idApp:id}, {$set:{imgSet:appData.image}}, (err,result)=>{
 											db.collection("Offerlead").updateMany({idApp:id}, {$set:{imgSet:appData.image}}, (err,result)=>{
+												db.close();
 												res.send(appData);
 											})
 										})
 									}else{
+										db.close();
 										res.send("error");
 									}
-									db.close();
 								})
 							}else{
+								db.close();
 								res.send("error");
 							}
 						} catch(e) {
+							db.close();
 							res.send("error");
 						}
 					})
 			})
 		} catch(e) {
+			if(db){
+				db.close();
+			}
 			res.send(e);
 		}
 		
@@ -91,6 +102,7 @@ router.get('/:value', function(req, res, next) {
 					query.platform = req.query.platform;
 				}
 				db.collection("imagesIcon").findOne(query ,(err,result)=>{
+					db.close();
 					if(!err){
 						if(result){
 							res.send(result);
@@ -105,11 +117,18 @@ router.get('/:value', function(req, res, next) {
 										checkAppleApp(req.query.id, false)
 									}
 								}
+							}else{
+								db.close();
+								res.send("error")
 							}
 						}
+					}else{
+						db.close();
+						res.send(err)
 					}
 				})
 			}else{
+				db.close();
 				res.send("error")
 			}
 		})

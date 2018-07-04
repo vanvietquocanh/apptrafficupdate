@@ -22,6 +22,7 @@ router.post('/', function(req, res, next) {
 								"password" : req.body.password
 							}
 							db.collection("useradd").deleteOne(queryDel, (err, result)=>{
+								db.close();
 								if(!err){
 									res.send(req.body);
 								}else{
@@ -29,13 +30,15 @@ router.post('/', function(req, res, next) {
 								}
 							})				
 						}else{
+							db.close();
 							res.redirect("/")
 						}
-						assert.equal(null,err);
-						db.close();
 					});
 			});
 		} catch(e) {
+			if(db){
+				db.close();
+			}
 			res.redirect("/")
 		}
 	}else{

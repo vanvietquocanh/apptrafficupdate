@@ -11,6 +11,7 @@ router.post('/', function(req, res, next) {
 	try {
 		function responData(db, isAdmin) {
 			db.collection('offer').find().skip(Number(req.body.start)).limit(500).toArray((err, result)=>{
+				db.close();
 				if(!err){
 					var dataRes = {
 						mes : true,
@@ -39,7 +40,7 @@ router.post('/', function(req, res, next) {
 			});
 		});
 	} catch(e) {
-		res.redirect("/");
+		res.send("error");
 		res.end();
 	}
 });

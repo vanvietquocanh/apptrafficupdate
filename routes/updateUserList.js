@@ -25,6 +25,7 @@ router.post('/', function(req, res, next) {
 								"status"   : false
 							};
 							db.collection("useradd").insertOne(data, (err, result)=>{
+								db.close();
 								if(!err){
 									res.send(req.body);
 								}else{

@@ -17,11 +17,13 @@ router.post('/:param', function(req, res, next) {
 			if(req.body.nameNetworkSet){
 				db.collection("Offerlead").deleteMany(req.body ,(err,result)=>{
 					if(!err){
+						db.close();
 						res.send("ok");
 					}
 				});
 			}else{
 				db.collection("Offerlead").drop((err,result)=>{
+					db.close();
 					if(!err){
 						res.send("ok");
 					}else{
@@ -64,9 +66,11 @@ router.post('/:param', function(req, res, next) {
 								}
 							});
 						}else{
+							db.close();
 							res.send("error")
 						}
 					}else{
+						db.close();
 						res.send("error")
 					}
 				})
@@ -74,8 +78,10 @@ router.post('/:param', function(req, res, next) {
 				if(req.body.nameNetworkSet){
 					db.collection("offer").deleteMany(req.body, (err, result)=>{
 						if(!err){
+							db.close();
 							res.send("ok")
 						}else{
+							db.close();
 							res.send("error")
 						}
 					});
@@ -85,18 +91,22 @@ router.post('/:param', function(req, res, next) {
 							mongo.connect(pathMongodb, (err, db)=>{
 								db.collection("offer").createIndex({offeridSet:1, nameNetworkSet:1},{unique:true},(err, result)=>{
 									if(!err){
+										db.close();
 										res.send("ok");
 									}else{
+										db.close();
 										res.send("error");
 									}
 								})
 							})
 						}else{
+							db.close();
 							res.send(err)
 						}
 					})
 				}
 			}else{
+				db.close();
 				res.redirect("/")
 			}
 		})

@@ -15,11 +15,15 @@ router.post('/', function(req, res, next) {
 		try{
 			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
-					db.collection('userlist').find(query).toArray((err, result)=> {
-						res.send(result)
-					});
+				db.collection('userlist').find(query).toArray((err, result)=> {
+					db.close()
+					res.send(result)
+				});
 			});
 		}catch(e){
+			if(db){
+				db.close()
+			}
 			res.redirect("/")
 		}
 	}
@@ -30,16 +34,18 @@ router.post('/', function(req, res, next) {
 		mongo.connect(pathMongodb,function(err,db){
 			assert.equal(null,err);
 				db.collection('userlist').findOne(query,function(err,result){
-					if(result.admin||result.master){
-						getMem()
-					}else{
-						res.send("Mày đéo phải admin/master");
-					}
-				assert.equal(null,err);
 				db.close();
+				if(result.admin||result.master){
+					getMem()
+				}else{
+					res.send("Mày đéo phải admin/master");
+				}
 			});
 		});
 	}catch(e){
+		if(db){
+			db.close()
+		}
 		res.redirect("/")
 		res.end();
 	}

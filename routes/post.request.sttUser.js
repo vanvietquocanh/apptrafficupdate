@@ -17,6 +17,7 @@ router.post('/', function(req, res, next) {
 							"username" : req.body.username
 						}
 						db.collection("useradd").findOne(query, (err, result)=>{
+							db.close();
 							if(!err){
 								if(result){
 									if(req.body.password===result.password&&result.ipAddress.split(",").indexOf(req.body.ipAddress)!==-1){
@@ -30,6 +31,9 @@ router.post('/', function(req, res, next) {
 							}
 						})		
 					} catch(e) {
+						if(db){
+							db.close();
+						}
 						res.send("error");
 					}		
 				});
@@ -37,6 +41,9 @@ router.post('/', function(req, res, next) {
  				res.send(true);
  			}
 		} catch(e) {
+			if(db){
+				db.close();
+			}
 			res.send("error")
 		}
 });

@@ -16,6 +16,7 @@ router.get('/:cvr', function(req, res, next) {
 			}
 			mongo.connect(pathMongodb,(err,db)=>{
 				db.collection("conversion").aggregate([{$group:{_id : "$previewLink", ip :{$push:"$ip"}}}]).toArray((err, result)=>{
+					db.close();
 					if(!err){
 						for (var i = 0; i < result.length; i++) {
 							result[i].ip = result[i].ip.toString();

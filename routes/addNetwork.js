@@ -15,14 +15,14 @@ router.post('/', function(req, res, next) {
 			var data = req.body
 			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
-					db.collection('network').updateOne(query,data, {upsert: true},function(err,result){
-						if(!err){
-							res.send(true);
-						}else {
-							res.send(false);
-						}
+				db.collection('network').updateOne(query,data, {upsert: true},function(err,result){
 					assert.equal(null,err);
 					db.close();
+					if(!err){
+						res.send(true);
+					}else {
+						res.send(false);
+					}
 				});
 			});
 		}catch(e){
@@ -37,11 +37,11 @@ router.post('/', function(req, res, next) {
 		mongo.connect(pathMongodb,function(err,db){
 			assert.equal(null,err);
 				db.collection('userlist').findOne(query, function(err,result){
+				assert.equal(null,err);
+				db.close();
 					if(result.admin){
 						saveDB()
 					}
-				assert.equal(null,err);
-				db.close();
 			});
 		});
 	} catch(e) {

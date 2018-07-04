@@ -37,13 +37,13 @@ router.post('/', function(req, res, next) {
 				mongo.connect(pathMongodb,function(err,db){
 					assert.equal(null,err);
 						db.collection('report').find(query).skip(Number(req.body.countStart)).limit(500).sort({$natural:-1}).toArray((err,result)=>{
+							assert.equal(null,err);
+							db.close();
 							if(!err){
 								res.send(result);
 							}else{
 								res.send(err)
 							}
-						assert.equal(null,err);
-						db.close();
 					});
 				});
 			}
@@ -53,6 +53,7 @@ router.post('/', function(req, res, next) {
 			mongo.connect(pathMongodb, (err, db)=>{
 				assert.equal(null, err);
 					db.collection("userlist").findOne(userRequest, (err,result)=>{
+					db.close();
 						if(result){
 							responseReportClick(result)
 						}else{
@@ -61,6 +62,9 @@ router.post('/', function(req, res, next) {
 					})
 			})
 		} catch(e) {
+			if(db){
+				db.close();
+			}
 			console.log(e);
 		}
 	}else{

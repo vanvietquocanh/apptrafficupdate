@@ -17,6 +17,7 @@ router.get('/', function(req, res, next) {
 			var strRandom = randomstring.generate();
 			db.collection('network').findOne(queryNetwork, function(err,result){
 				assert.equal(null,err);
+				db.close();
 				if(!err){
 					if(result){
 						var link = `${app.urlSet}&${result.postback}=${strRandom}`;
@@ -26,7 +27,6 @@ router.get('/', function(req, res, next) {
 					res.send("error")
 				}
 				assert.equal(null,err);
-				db.close();
 			});
 		} catch(e) {
 			console.log(e);

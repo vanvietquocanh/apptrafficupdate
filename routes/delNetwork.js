@@ -12,17 +12,16 @@ router.post('/', function(req, res, next) {
 			var id = req.body._id;
 			var o_id = ObjectId(id);
 			db.collection('network').deleteOne({_id: o_id}, function(err,result){
+				assert.equal(null,err);
+				db.close();
 				if(!err){
 					res.send(true)
 				}else {
 					res.send(false)
 				}
-				assert.equal(null,err);
-				db.close();
 			});
 		}catch(e){
-			console.log(e)
-			res.redirect("/")
+			res.send("error");
 			res.end();
 		}	
 	}

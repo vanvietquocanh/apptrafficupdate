@@ -19,12 +19,13 @@ router.post('/', function(req, res, next) {
 				mongo.connect(pathMongodb,function(err,db){
 					assert.equal(null,err);
 						db.collection('userlist').updateOne(query, data, {upsert:true}, function(err,result){
-							res.send({"status":req.body.idFacebook});
 							assert.equal(null,err);
 							db.close();
+							res.send({"status":req.body.idFacebook});
 						});
 				});
 			}catch(e){
+				db.close();
 				res.send(JSON.stringify({"status":{
 					"id" : req.body.idFacebook,
 					"stt": "err"
@@ -38,16 +39,16 @@ router.post('/', function(req, res, next) {
 			}
 			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
-					db.collection('userlist').findOne(query,function(err,result){
-						if(result.admin){
-							demote(req.body.id)
-						}
+				db.collection('userlist').findOne(query,function(err,result){
 					assert.equal(null,err);
 					db.close();
+					if(result.admin){
+						demote(req.body.id)
+					}
 				});
 			});
 		}catch(e){
-			res.redirect("/")
+			res.send("error");
 			res.end();
 		}
 	}

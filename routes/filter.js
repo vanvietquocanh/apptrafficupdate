@@ -28,6 +28,7 @@ router.post('/', function(req, res, next) {
 				query1.nameNetworkSet = req.body.netWork.toLowerCase();
 			}
 			db.collection('offer').find(query1).skip(Number(req.body.start)).limit(500).toArray((err, result)=>{
+				db.close();
 				if(!err){
 					var dataRes = {
 						admin  	 : {
@@ -38,7 +39,6 @@ router.post('/', function(req, res, next) {
 						},
 						offerList: result
 					}
-					db.close();
 					res.send(dataRes)
 				}
 			})

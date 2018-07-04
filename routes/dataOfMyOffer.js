@@ -34,6 +34,7 @@ router.post('/', function(req, res, next) {
 				assert.equal(null,err);
 				var dataRespon = [];
 					db.collection('userlist').findOne(query, (err,result)=>{
+						db.close();
 						result.request.forEach((items, index)=>{
 							if(order(items, index)){
 								dataRespon.push(items)
@@ -47,10 +48,13 @@ router.post('/', function(req, res, next) {
 					});
 			});
 		} catch(e) {
-			res.redirect("/")
+			if(db){
+				db.close();
+			}
+			res.send("error")
 		}
 	}else{
-		res.redirect("/")
+		res.send("error")
 	}
 });
 

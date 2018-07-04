@@ -25,19 +25,19 @@ router.post('/', function(req, res, next) {
                   //   query.
                   // }
 				  				db.collection("imagesIcon").find(query).skip(Number(req.body.start)).limit(500).toArray((err, result)=>{
-					  				if(!err){
+					  				if(!err){db.close();
 					  					res.send(result);
-					  				}else {
+					  				}else {db.close();
 					  					res.send("error");
 					  				}
 					  			})
-				  			} catch(e) {
+				  			} catch(e) {db.close();
 				  				res.send("error");
 				  			}
-  						}else{
+  						}else{db.close();
 							res.send("error");
   						}
-  					}else{
+  					}else{db.close();
 						res.send("error");
   					}
   				})

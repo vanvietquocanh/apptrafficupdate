@@ -10,14 +10,15 @@ router.get('/:value', function(req, res, next) {
 	if(req.params.value==="cvr"){
 		try {
 			mongo.connect(pathMongodb, (err, db)=>{
-				db.collection("conversion").aggregate([{$group : {"_id" : {idOfferNet: "$idOfferNet", networkName:"$networkName", country: "$country"}}}], (err,result)=>{
+				db.collection("conversion").aggregate([{$match:{"seconds": { $gt: new Date().getTime()-24*60*60*1000 }}},{$group:{_id: {_id:"$idOffer", idOfferNet: "$idOfferNet", networkName:"$networkName", country: "$country", platformSet : "$platfrom", nameApp:"$appName"}, count :{$sum:1}}}], (err,conversion)=>{
 					if(!err){
-						var queryArr = [];
-						for (var i = 0; i < result.length; i++) {
-							queryArr.push({$and : [{"idOfferNet" : result[i]._id.idOfferNet, "networkName" : result[i]._id.networkName, "country" : result[i]._id.country, "seconds": { $gt: new Date().getTime()-24*60*60*1000 }}]});
-						}
-						db.collection("report").aggregate([{$match:{$or:queryArr}}, {$group:{_id:{_id:"$idOffer", idOfferNet: "$idOfferNet", networkName:"$networkName", country: "$country"}, count :{$sum:1}}}],(err, report)=>{
-							db.collection("conversion").aggregate([{$match:{$or:queryArr}}, {$group:{_id: {_id:"$idOffer", idOfferNet: "$idOfferNet", networkName:"$networkName", country: "$country", platformSet : "$platfrom"}, count :{$sum:1}}}],(err, conversion)=>{
+						// var queryArr = [];
+						// for (var i = 0; i < result.length; i++) {
+						// 	queryArr.push({$and : [{"idOfferNet" : result[i]._id.idOfferNet, "networkName" : result[i]._id.networkName, "country" : result[i]._id.country, "seconds": { $gt: new Date().getTime()-24*60*60*1000 }}]});
+						// }
+						db.collection("report").aggregate([{$match:{"seconds": { $gt: new Date().getTime()-24*60*60*1000 }}},{$group:{_id: {_id:"$idOffer", idOfferNet: "$idOfferNet", networkName:"$networkName", country: "$country", platformSet : "$platfrom", nameApp:"$appName"}, count :{$sum:1}}}],(err, report)=>{
+							// db.collection("conversion").aggregate([{$match:{$or:queryArr}}, {$group:{_id: {_id:"$idOffer", idOfferNet: "$idOfferNet", networkName:"$networkName", country: "$country", platformSet : "$platfrom", nameApp:"$appName"}, count :{$sum:1}}}],(err, conversion)=>{
+								db.close();
 								var dataCVR = [];
 								for (let i = 0; i < conversion.length; i++) {
 									for(let j = 0; j < report.length; j++){
@@ -26,6 +27,7 @@ router.get('/:value', function(req, res, next) {
 															"cvr" : parseFloat(Math.round(conversion[i].count/report[j].count*100))+"%", 
 												        "country" : conversion[i]._id.country,
 												       "platform" : conversion[i]._id.platformSet,
+												       "nameApp" : conversion[i]._id.nameApp,
 													"nameNetwork" : conversion[i]._id.networkName,
 													 "idOfferNet" : conversion[i]._id.idOfferNet
 													})
@@ -48,6 +50,7 @@ router.get('/:value', function(req, res, next) {
 									// dataSub.offerType = data[i].offerType;
 									// dataSub.prevLink = data[i].prevLink;
 									dataSub.countrySet = dataCVR[i].country;
+									dataSub.nameApp = dataCVR[i].nameApp;
 									dataSub.cvr = dataCVR[i].cvr;
 									dataSub.memberLink = `http://${req.headers.host}/checkparameter/?offer_id=${dataCVR[i].index}&aff_id=181879769070526`;
 									dataSub.adminLink = `http://${req.headers.host}/click/?offer_id=${dataCVR[i].index}`;
@@ -68,7 +71,7 @@ router.get('/:value', function(req, res, next) {
 								// 	}
 								// })
 							});
-						});
+						// });
 					}
 				})
 			})

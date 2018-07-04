@@ -19,6 +19,7 @@ router.post('/', function(req, res, next) {
  			mongo.connect(pathMongodb,function(err,db){
 				assert.equal(null,err);
 					db.collection('userlist').findOne(query, (err,result)=>{
+						db.close();
 						if(result.admin){
 							deleteOff(db);
 						}else{

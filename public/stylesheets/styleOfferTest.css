@@ -1,0 +1,16 @@
+body .text-value-intable {
+  max-width: 500px;
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px; }
+
+body .table-hidden-more {
+  display: none; }
+
+body .size-icon-app-live {
+  width: 50px;
+  height: 50px; }
+
+/*# sourceMappingURL=style.css.map */

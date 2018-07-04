@@ -18,8 +18,10 @@ router.post('/', function(req, res, next) {
 						}
 						db.collection('offer').insertOne(req.body.data[0], (err,result)=>{
 							if(!err){
+								db.close();
 								res.send(req.body)
 							}else{
+								db.close();
 								res.send(err)
 							}
 						});
@@ -35,6 +37,7 @@ router.post('/', function(req, res, next) {
 						if(result.admin){
 							updateDB(db)
 						}else {
+							db.close();
 							res.redirect("/")
 						}
 					})
